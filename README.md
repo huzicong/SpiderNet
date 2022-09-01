@@ -101,7 +101,7 @@ python eval.py -c config/config.yaml
 
 ## Training
 
-Edit the `config.yaml` file to Set the corresponding hyperparameters.
+Edit the `config.yaml` file to set the corresponding hyperparameters.
 
 Start training:
 
