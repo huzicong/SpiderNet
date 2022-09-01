@@ -1,0 +1,74 @@
+# train.py Config - Training
+train:
+  # For datasets, please pass atleast 1 value. If no datasets exist, pass "" as path for images.
+  # Synthetic datasets with ground truth labels
+  dataset:
+    type: 'mixed'
+    inputDir: './dataset/'
+    omni_split_ratio: 1.0
+
+  # Training/Validation Params
+  modelParam:
+    numStage: 3
+    reduction: 4
+  batchSize: 16
+  valBatchSize: 1
+  numEpochs: 200
+
+  imgHeight: 256
+  imgWidth: 256
+
+  numWorkers: 16 # Num of workers used in the dataloader
+  lossWeights: [1.0, 1.0, 1.0]  # Weight of every stage loss
+
+  logsDir: 'logs' # Directory where logs of each exp will be saved.
+  percentageDataForTraining: 1.0 # The percentage of images in dataset to be used for training.
+
+  continueTraining: False # If true, continue training from a checkpoint
+  pathPrevCheckpoint: './checkpoints/best.pth' # Path to .pth checkpoint file to load to continue training from
+  initOptimizerFromCheckpoint: True  # Re-Initialize optimizer's state from checkpoint. NOTE: when this is enabled, value of learningRate will be overridden with value from checkpoint.
+  loadEpochNumberFromCheckpoint: True # If true, the epoch/iter numbering will start from the checkpoint's last epoch num.
+
+  saveImageInterval: 1 # every N epochs, log output images to tensorboard
+  saveModelInterval: 2 # Save the model checkpoints every N epochs
+
+  # Optimizer Params
+  optimizer: 'Adam' # Possible Values: ['Adam']
+  optimAdam:
+    learningRate: 1e-4
+    weight_decay: 0
+  lrScheduler: 'CosineAnnealingLR' # Possible Values: ['StepLR', 'CosineAnnealingLR']
+  stepLR:
+    step_size: 10
+    gamma: 0.9
+  CosineAnnealingLR:
+    T_max: 200
+    eta_min: 1e-7
+
+
+
+# eval.py Config - Validation/Testing Inference
+eval:
+  dataset:
+    type: 'cleargrasp' # Possible Values: ['cleargrasp']
+    inputDir: '/Users/hyt/Documents/code/dataset/'
+    expType: 'val'  # this config is set for cleargrasp dataset.
+    objType: 'real'  # this config is set for cleargrasp dataset.
+
+  # Params
+  modelParam:
+    numStage: 3
+    reduction: 4
+
+  batchSize: 1
+  imgHeight: 256
+  imgWidth: 256
+  numWorkers: 4 # Num of workers used in the dataloader
+  minDepth: 0.1  # meters. Depth less than this value not considered in creating rgb visualization of depth.
+  maxDepth: 1.5  # meters. Depth more than this value not considered in creating rgb visualization of depth.
+
+  outputImgHeight: 144
+  outputImgWidth: 256
+
+  pathWeightsFile: './checkpoints/best.pth' # Path to the checkpoint to be loaded
+  resultsDir: 'data' # The dir to which results will be stored

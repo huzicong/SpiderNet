@@ -1,0 +1,14 @@
+oyaml
+numpy
+torch
+torchvision
+OpenEXR
+attrdict
+tensorflow
+tensorboardX
+tqdm
+termcolor
+imageio
+imgaug
+h5py
+opencv-python==4.1.2.30
